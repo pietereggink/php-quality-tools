@@ -5,11 +5,13 @@ declare(strict_types=1);
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
+$projectRoot = getcwd();
+
 $finder = (new Finder())->in([
-    __DIR__ . '/bin',
-    __DIR__ . '/config',
-    __DIR__ . '/src',
-    __DIR__ . '/tests',
+    $projectRoot . '/bin',
+    $projectRoot . '/config',
+    $projectRoot . '/src',
+    $projectRoot . '/tests',
 ]);
 
 return (new Config())->setRules([

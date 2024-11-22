@@ -35,5 +35,8 @@
             "@code-coverage"
         ]
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "bin": [
+        "bin/checkup"
+    ]
 }

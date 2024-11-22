@@ -1,7 +1,7 @@
 parameters:
   level: max
   paths:
-    - src
+    - %paths%
   excludes_analyse:
   ignoreErrors:
   checkMissingIterableValueType: true

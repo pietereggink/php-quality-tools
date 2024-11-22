@@ -10,16 +10,20 @@ use Rector\Set\ValueObject\SetList;
 return static function(RectorConfig $rectorConfig): void {
     $rectorConfig->importNames();
 
+    $projectRoot = getcwd();
+
     $rectorConfig->paths(
         [
-            __DIR__ . '/src',
-            __DIR__ . '/tests',
+            $projectRoot . '/src',
+            $projectRoot . '/tests',
             __DIR__ . '/rector.php',
         ]
     );
     $rectorConfig->skip([
+        $projectRoot . '/vendor',
         AddOverrideAttributeToOverriddenMethodsRector::class,
     ]);
+
     $rectorConfig->sets(
         [
             LevelSetList::UP_TO_PHP_83,

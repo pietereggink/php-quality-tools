@@ -1,0 +1,58 @@
+#!/usr/bin/env php
+<?php
+
+function createDynamicPhpStanConfig(string $distConfigPath, string $projectSrcPath): string {
+    $configContent = file_get_contents($distConfigPath);
+
+    $updatedConfigContent = str_replace('%paths%', getcwd() . '/' . $projectSrcPath, $configContent);
+
+    $tempConfigPath = sys_get_temp_dir() . '/phpstan.neon';
+    file_put_contents($tempConfigPath, $updatedConfigContent);
+
+    return $tempConfigPath;
+}
+
+function runCommand(string $description, string $command, string $successMessage, string $errorMessage): void {
+    echo "{$description}...\n";
+
+    $output = shell_exec($command) ?? '';
+
+    if (str_contains($output, '[OK]') || str_contains($output, 'No errors')) {
+        echo "{$successMessage}\n";
+    } elseif (str_contains($output, '[ERROR]') || str_contains($output, 'violations')) {
+        echo "{$errorMessage}\n";
+    }
+
+    echo $output;
+    echo "\n";
+}
+
+$rectorConfigPath = __DIR__ . '/../rector.php';
+$csFixerConfigPath = __DIR__ . '/../.php-cs-fixer.dist.php';
+$phpStanDistConfigPath = __DIR__ . '/../phpstan.neon.dist';
+$projectSrcPath = 'src';
+
+$phpStanConfigPath = createDynamicPhpStanConfig($phpStanDistConfigPath, $projectSrcPath);
+
+runCommand(
+    'Running Rector',
+    'vendor/bin/rector --dry-run --config=' . escapeshellarg($rectorConfigPath),
+    'Rector completed successfully!',
+    'Rector encountered issues!'
+);
+
+runCommand(
+    'Running PHP-CS-Fixer',
+    'vendor/bin/php-cs-fixer fix --dry-run --config=' . escapeshellarg($csFixerConfigPath),
+    'PHP-CS-Fixer completed successfully!',
+    'PHP-CS-Fixer found violations!'
+);
+
+runCommand(
+    'Running PHPStan',
+    'vendor/bin/phpstan analyse --memory-limit=256M --configuration=' . escapeshellarg($phpStanConfigPath),
+    'PHPStan completed successfully!',
+    'PHPStan found issues!'
+);
+
+echo "All tasks completed!\n";
