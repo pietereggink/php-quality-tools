@@ -1,0 +1,39 @@
+{
+    "name": "pietereggink/php-quality-tools",
+    "description": "Quality tools for your php symfony projects",
+    "type": "library",
+    "require": {
+        "php": "^8.3",
+        "rector/rector": "^1.2.10",
+        "friendsofphp/php-cs-fixer": "^3.64",
+        "squizlabs/php_codesniffer": "^3.11.1",
+        "phpcompatibility/php-compatibility": "^9.3.5",
+        "phpstan/phpstan": "^1.12",
+        "phpunit/phpunit": "^11.4.3",
+        "qossmic/deptrac": "^2.0.4"
+    },
+    "scripts": {
+        "rector": "vendor/bin/rector",
+        "rector-check": "vendor/bin/rector --dry-run",
+        "fix-phpcs": "vendor/bin/rector ; vendor/bin/php-cs-fixer fix",
+        "phpcs": "vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation",
+        "phpcompatibility": "vendor/bin/phpcs --standard=./phpcs_phpcompatibility.xml -n --runtime-set testVersion 8.3-",
+        "phpstan": "vendor/bin/phpstan analyse --memory-limit=256M",
+        "integration-tests": "APP_ENV=dev vendor/bin/phpunit --testsuite Integration",
+        "unit-tests": "vendor/bin/phpunit --testsuite Unit",
+        "code-coverage": [
+            "Composer\\Config::disableProcessTimeout",
+            "XDEBUG_MODE=coverage vendor/bin/phpunit -d memory_limit=-1 -d max_execution_time=-1 --testsuite Unit --log-junit phpunit-report.xml --coverage-html var/reports/coverage --coverage-clover \"var/reports/coverage/clover.xml\" --coverage-cobertura=var/reports/coverage.cobertura.xml",
+            "php tests/coverage-check.php \"var/reports/coverage/clover.xml\" 100"
+        ],
+        "checkup": [
+            "@rector-check",
+            "@phpcs",
+            "@phpcompatibility",
+            "@phpstan",
+            "@integration-tests",
+            "@code-coverage"
+        ]
+    },
+    "minimum-stability": "stable"
+}

@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+    php:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+        container_name: php-cli
+        volumes:
+            - .:/app
+        working_dir: /app
+        tty: true
+        environment:
+            SYMFONY_ENV: dev
+        command: tail -f /dev/null
