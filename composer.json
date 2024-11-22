@@ -23,7 +23,7 @@
         "unit-tests": "vendor/bin/phpunit --testsuite Unit",
         "code-coverage": [
             "Composer\\Config::disableProcessTimeout",
-            "XDEBUG_MODE=coverage vendor/bin/phpunit -d memory_limit=-1 -d max_execution_time=-1 --testsuite Unit --log-junit phpunit-report.xml --coverage-html var/reports/coverage --coverage-clover \"var/reports/coverage/clover.xml\" --coverage-cobertura=var/reports/coverage.cobertura.xml",
+            "XDEBUG_MODE=coverage vendor/bin/phpunit -d memory_limit=-1 -d max_execution_time=-1 --testsuite Unit --log-junit var/reports/phpunit-report.xml --coverage-html var/reports/coverage --coverage-clover=var/reports/coverage/clover.xml --coverage-cobertura=var/reports/coverage.cobertura.xml",
             "php tests/coverage-check.php \"var/reports/coverage/clover.xml\" 100"
         ],
         "checkup": [
